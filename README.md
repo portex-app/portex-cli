@@ -20,7 +20,7 @@ $ npm install -g @portex-app/cli
 $ portex COMMAND
 running command...
 $ portex (--version)
-@portex-app/cli/0.1.0 darwin-arm64 node-v22.2.0
+@portex-app/cli/0.1.1 darwin-arm64 node-v22.2.0
 $ portex --help [COMMAND]
 USAGE
   $ portex COMMAND
@@ -56,7 +56,7 @@ ARGUMENTS
   APPNAME  application name
 ```
 
-_See code: [src/commands/bot.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot.ts)_
+_See code: [src/commands/bot.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/bot.ts)_
 
 ## `portex bot menu set APPNAME MENUURL`
 
@@ -76,7 +76,7 @@ DESCRIPTION
   set Telegram Menu button
 ```
 
-_See code: [src/commands/bot/menu/set.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/menu/set.ts)_
+_See code: [src/commands/bot/menu/set.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/bot/menu/set.ts)_
 
 ## `portex bot message del APPNAME [KEYS]`
 
@@ -96,7 +96,7 @@ DESCRIPTION
   delete message(s) of a Telegram bot
 ```
 
-_See code: [src/commands/bot/message/del.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/message/del.ts)_
+_See code: [src/commands/bot/message/del.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/bot/message/del.ts)_
 
 ## `portex bot message ls APPNAME`
 
@@ -115,7 +115,7 @@ DESCRIPTION
   get bot message list
 ```
 
-_See code: [src/commands/bot/message/ls.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/message/ls.ts)_
+_See code: [src/commands/bot/message/ls.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/bot/message/ls.ts)_
 
 ## `portex bot message save APPNAME MESSAGES`
 
@@ -135,7 +135,7 @@ DESCRIPTION
   save bot messages
 ```
 
-_See code: [src/commands/bot/message/save.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/message/save.ts)_
+_See code: [src/commands/bot/message/save.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/bot/message/save.ts)_
 
 ## `portex bot register APPNAME BOTTOKEN`
 
@@ -155,7 +155,7 @@ DESCRIPTION
   register telegram bot
 ```
 
-_See code: [src/commands/bot/register.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/register.ts)_
+_See code: [src/commands/bot/register.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/bot/register.ts)_
 
 ## `portex deploy APPNAME PATH [DESCRIPTION]`
 
@@ -176,7 +176,7 @@ DESCRIPTION
   deploy mini-app, upload mini-app package from application build path.
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/deploy.ts)_
 
 ## `portex help [COMMAND]`
 
@@ -212,7 +212,7 @@ DESCRIPTION
   login to your portex account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/login.ts)_
 
 ## `portex ls`
 
@@ -226,7 +226,7 @@ FLAGS
   -h, --help  Displays this help information.
 ```
 
-_See code: [src/commands/ls.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/ls.ts)_
+_See code: [src/commands/ls.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/ls.ts)_
 
 ## `portex new`
 
@@ -237,7 +237,7 @@ USAGE
   $ portex new
 ```
 
-_See code: [src/commands/new.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/new.ts)_
 
 ## `portex publish APPNAME VERSION`
 
@@ -261,5 +261,5 @@ DESCRIPTION
   publish mini-app to portex
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/publish.ts)_
+_See code: [src/commands/publish.ts](https://github.com/portex-app/portex-cli/blob/v0.1.1/src/commands/publish.ts)_
 <!-- commandsstop -->

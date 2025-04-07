@@ -2,13 +2,13 @@ import { Args } from '@oclif/core';
 import { apiDelBotMessages, apiGetBot } from '../../../api/modules/telegram/index.js';
 import { BaseCommand } from '../../../lib/base-command.js';
 export default class BotMessageDel extends BaseCommand {
-    static topic = 'bot:message';
     static args = {
         appName: Args.string({ description: 'application name', required: true }),
         keys: Args.string({ description: 'message keys', required: false }),
     };
     static description = 'delete message(s) of a Telegram bot';
     static summary = 'About Telegram Bot Command';
+    static topic = 'bot:message';
     async run() {
         const { args } = await this.parse(BotMessageDel);
         const { id: application_id, platform_name } = await this.getApplicationInfo({ application_name: args.appName });
