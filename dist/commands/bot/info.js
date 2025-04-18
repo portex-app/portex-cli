@@ -1,16 +1,16 @@
 import { Args } from '@oclif/core';
 import { table } from 'table';
-import { apiGetBot } from '../api/modules/telegram/index.js';
-import { BaseCommand } from '../lib/base-command.js';
-import { getTableConfig } from '../utils/index.js';
-export default class Bot extends BaseCommand {
+import { apiGetBot } from '../../api/modules/telegram/index.js';
+import { BaseCommand } from '../../lib/base-command.js';
+import { getTableConfig } from '../../utils/index.js';
+export default class BotInfo extends BaseCommand {
     static args = {
         appName: Args.string({ description: 'application name', required: true }),
     };
     static summary = 'Manage bots in the mini-app';
     static topic = 'bot';
     async run() {
-        const { args } = await this.parse(Bot);
+        const { args } = await this.parse(BotInfo);
         const { id: application_id, platform_name } = await this.getApplicationInfo({ application_name: args.appName });
         if (platform_name === 'Telegram') {
             try {

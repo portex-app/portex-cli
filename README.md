@@ -20,7 +20,7 @@ $ npm install -g @portex-app/cli
 $ portex COMMAND
 running command...
 $ portex (--version)
-@portex-app/cli/0.1.0 darwin-arm64 node-v22.2.0
+@portex-app/cli/0.1.2 darwin-arm64 node-v22.2.0
 $ portex --help [COMMAND]
 USAGE
   $ portex COMMAND
@@ -31,11 +31,9 @@ USAGE
 # Commands
 
 <!-- commands -->
-* [`portex bot APPNAME`](#portex-bot-appname)
-* [`portex bot menu set APPNAME MENUURL`](#portex-bot-menu-set-appname-menuurl)
-* [`portex bot message del APPNAME [KEYS]`](#portex-bot-message-del-appname-keys)
-* [`portex bot message ls APPNAME`](#portex-bot-message-ls-appname)
-* [`portex bot message save APPNAME MESSAGES`](#portex-bot-message-save-appname-messages)
+* [`portex bot info APPNAME`](#portex-bot-info-appname)
+* [`portex bot menu set APPNAME MENUNAME MENUURL`](#portex-bot-menu-set-appname-menuname-menuurl)
+* [`portex bot message APPNAME [PATH]`](#portex-bot-message-appname-path)
 * [`portex bot register APPNAME BOTTOKEN`](#portex-bot-register-appname-bottoken)
 * [`portex deploy APPNAME PATH [DESCRIPTION]`](#portex-deploy-appname-path-description)
 * [`portex help [COMMAND]`](#portex-help-command)
@@ -44,31 +42,32 @@ USAGE
 * [`portex new`](#portex-new)
 * [`portex publish APPNAME VERSION`](#portex-publish-appname-version)
 
-## `portex bot APPNAME`
+## `portex bot info APPNAME`
 
 Manage bots in the mini-app
 
 ```
 USAGE
-  $ portex bot APPNAME
+  $ portex bot info APPNAME
 
 ARGUMENTS
   APPNAME  application name
 ```
 
-_See code: [src/commands/bot.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot.ts)_
+_See code: [src/commands/bot/info.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/bot/info.ts)_
 
-## `portex bot menu set APPNAME MENUURL`
+## `portex bot menu set APPNAME MENUNAME MENUURL`
 
 About Telegram Bot Command
 
 ```
 USAGE
-  $ portex bot menu set APPNAME MENUURL
+  $ portex bot menu set APPNAME MENUNAME MENUURL
 
 ARGUMENTS
-  APPNAME  appliaction name
-  MENUURL  menu url
+  APPNAME   appliaction name
+  MENUNAME  [default: open] menu name
+  MENUURL   menu url
 
 DESCRIPTION
   About Telegram Bot Command
@@ -76,66 +75,32 @@ DESCRIPTION
   set Telegram Menu button
 ```
 
-_See code: [src/commands/bot/menu/set.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/menu/set.ts)_
+_See code: [src/commands/bot/menu/set.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/bot/menu/set.ts)_
 
-## `portex bot message del APPNAME [KEYS]`
+## `portex bot message APPNAME [PATH]`
 
-About Telegram Bot Command
+Get or save bot messages
 
 ```
 USAGE
-  $ portex bot message del APPNAME [KEYS]
+  $ portex bot message APPNAME [PATH] [-i | -o | -t]
 
 ARGUMENTS
   APPNAME  application name
-  KEYS     message keys
+  PATH     file path or directory path
+
+FLAGS
+  -i, --input     input messages from file
+  -o, --output    output messages to file
+  -t, --template  output template instead of actual data
 
 DESCRIPTION
-  About Telegram Bot Command
+  Get or save bot messages
 
-  delete message(s) of a Telegram bot
+  get or save bot messages
 ```
 
-_See code: [src/commands/bot/message/del.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/message/del.ts)_
-
-## `portex bot message ls APPNAME`
-
-About Telegram Bot Command
-
-```
-USAGE
-  $ portex bot message ls APPNAME
-
-ARGUMENTS
-  APPNAME  application name
-
-DESCRIPTION
-  About Telegram Bot Command
-
-  get bot message list
-```
-
-_See code: [src/commands/bot/message/ls.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/message/ls.ts)_
-
-## `portex bot message save APPNAME MESSAGES`
-
-About Telegram Bot Command
-
-```
-USAGE
-  $ portex bot message save APPNAME MESSAGES
-
-ARGUMENTS
-  APPNAME   application name
-  MESSAGES  bot message
-
-DESCRIPTION
-  About Telegram Bot Command
-
-  save bot messages
-```
-
-_See code: [src/commands/bot/message/save.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/message/save.ts)_
+_See code: [src/commands/bot/message.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/bot/message.ts)_
 
 ## `portex bot register APPNAME BOTTOKEN`
 
@@ -155,7 +120,7 @@ DESCRIPTION
   register telegram bot
 ```
 
-_See code: [src/commands/bot/register.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/bot/register.ts)_
+_See code: [src/commands/bot/register.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/bot/register.ts)_
 
 ## `portex deploy APPNAME PATH [DESCRIPTION]`
 
@@ -176,7 +141,7 @@ DESCRIPTION
   deploy mini-app, upload mini-app package from application build path.
 ```
 
-_See code: [src/commands/deploy.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/deploy.ts)_
+_See code: [src/commands/deploy.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/deploy.ts)_
 
 ## `portex help [COMMAND]`
 
@@ -212,7 +177,7 @@ DESCRIPTION
   login to your portex account
 ```
 
-_See code: [src/commands/login.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/login.ts)_
+_See code: [src/commands/login.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/login.ts)_
 
 ## `portex ls`
 
@@ -226,7 +191,7 @@ FLAGS
   -h, --help  Displays this help information.
 ```
 
-_See code: [src/commands/ls.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/ls.ts)_
+_See code: [src/commands/ls.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/ls.ts)_
 
 ## `portex new`
 
@@ -237,7 +202,7 @@ USAGE
   $ portex new
 ```
 
-_See code: [src/commands/new.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/new.ts)_
+_See code: [src/commands/new.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/new.ts)_
 
 ## `portex publish APPNAME VERSION`
 
@@ -261,5 +226,5 @@ DESCRIPTION
   publish mini-app to portex
 ```
 
-_See code: [src/commands/publish.ts](https://github.com/portex-app/portex-cli/blob/v0.1.0/src/commands/publish.ts)_
+_See code: [src/commands/publish.ts](https://github.com/portex-app/portex-cli/blob/v0.1.2/src/commands/publish.ts)_
 <!-- commandsstop -->

@@ -9,7 +9,7 @@ export declare const apiBindBot: (application_id: string, tg_bot_token: string) 
  * @param application_id 应用id
  * @returns
  */
-export declare const apiGetBot: (application_id: string) => Promise<BotInfo>;
+export declare const apiGetBot: (application_id: string) => Promise<TelegramBotInfo>;
 /**
  * 修改机器人信息
  * @param application_id 应用id
@@ -29,12 +29,6 @@ export declare const apiUpdateMenuButton: (application_id: string, button_url: s
  * @param bot_messages 消息
  */
 export declare const apiSaveBotMessages: (application_id: string, bot_messages: BotMessages) => Promise<void>;
-/**
- * 删除指定的bot消息
- * @param application_id 应用id
- * @param message_keys 消息key
- */
-export declare const apiDelBotMessages: (application_id: string, message_keys: Array<string>) => Promise<void>;
 /**
  * 获取bot消息
  * @param application_id 应用id

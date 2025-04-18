@@ -32,8 +32,8 @@ export const apiUpdateBot = async (application_id, params) => {
  * @param button_url 按钮链接
  * @param button_name 按钮名称
  */
-export const apiUpdateMenuButton = async (application_id, button_url, button_name) => {
-    const url = `/v1/applications/${application_id}/tg-bots/start-button`;
+export const apiUpdateMenuButton = async (application_id, button_url, button_name = 'open') => {
+    const url = `/v1/applications/${application_id}/tg-bots/menu-button`;
     return Http.put(url, { button_name, button_url });
 };
 /**
@@ -43,18 +43,7 @@ export const apiUpdateMenuButton = async (application_id, button_url, button_nam
  */
 export const apiSaveBotMessages = async (application_id, bot_messages) => {
     const url = `/v1/applications/${application_id}/tg-bots/commands`;
-    const commands = bot_messages;
-    return Http.post(url, { commands });
-};
-/**
- * 删除指定的bot消息
- * @param application_id 应用id
- * @param message_keys 消息key
- */
-export const apiDelBotMessages = async (application_id, message_keys) => {
-    const queryParams = message_keys.map(key => `commands=${key}`).join('&');
-    const url = `/v1/applications/${application_id}/tg-bots/commands?${queryParams}`;
-    return Http.delete(url);
+    return Http.post(url, bot_messages);
 };
 /**
  * 获取bot消息

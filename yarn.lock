@@ -1273,10 +1273,9 @@
     "@pnpm/network.ca-file" "^1.0.1"
     config-chain "^1.1.11"
 
-"@portex-app/cli@^0.1.0":
+"@portex-app/cli@file:../../.nvm/versions/node/v22.2.0/lib/node_modules/@portex-app/cli":
   version "0.1.0"
-  resolved "https://registry.npmjs.org/@portex-app/cli/-/cli-0.1.0.tgz"
-  integrity sha512-8OsrtqMzX/aP/5kB+bW6IDgeIIG1Elzc5Y1b1OzHpZ2GyiujIHfiRkwP6ckH4QN0XEM8fLfSGbGZo98O18rjsg==
+  resolved "file:../../.nvm/versions/node/v22.2.0/lib/node_modules/@portex-app/cli"
   dependencies:
     "@oclif/core" "^4"
     "@oclif/plugin-help" "^6.2.22"

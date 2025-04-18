@@ -1,63 +1,71 @@
+/**
+ * Telegram bot binding request interface
+ */
 declare interface BindBotRequest {
-    /** telegram bot token */
+    /** Telegram bot token obtained from BotFather */
     tg_bot_token: string;
 }
 
+/**
+ * Base bot information interface with common fields
+ */
 declare interface BaseBotInfo {
+    /** Detailed description of the bot */
     description: string,
+    /** Display name of the bot */
     name: string,
+    /** Short description of the bot (max 120 characters) */
     short_description: string
 }
 
-declare interface BotInfo extends BaseBotInfo {
-    start_button_url: string
+/**
+ * Extended bot information interface with menu button URL
+ */
+declare interface TelegramBotInfo extends BaseBotInfo {
+    /** URL for the bot's menu button */
+    menu_button_url: string
 }
 
-
+/**
+ * Bot message button interface
+ */
 interface BotMessageButton {
-    text: string, // 按钮文本
-    url?: string, // 按钮链接，在 Public chat 中显示
+    /** Button text to display */
+    text: string,
+    /** Optional URL for the button in public chats */
+    url?: string,
+    /** Optional web app configuration for private chats */
     web_app?: {
-        url: string // 按钮链接，在 Private chat 中显示
+        /** URL for the web app in private chats */
+        url: string
     }
 }
 
-
 /**
- * 键盘按钮,（待定）
- * @see https://core.telegram.org/bots/api#keyboardbutton
+ * Bot message interface with various formatting options
  */
-interface BotMessageKeyboardButton {
-    text: string, // 按钮文本
-    web_app?: {
-        url: string // 按钮链接，在 Private chat 中显示
-    }
-}
-/**
- * 键盘
- * @see https://core.telegram.org/bots/api#replykeyboardmarkup
- */
-interface BotMessageKeyboard {
-    buttons: Array<Array<BotMessageKeyboardButton>>, // 按钮列表
-    is_persistent: boolean, // 是否持久化
-    resize: boolean, // 是否调整键盘大小
-    one_time: boolean, // 是否一次性显示
-    selective: boolean, // 是否选择性显示
-    input_field_placeholder: string, // 输入框提示
-}
-
 interface BotMessage {
-    text: string, // 消息内容
-    buttons?: Array<Array<BotMessageButton>>, // 按钮列表，在 Private chat 中显示
-    parse_mode?: "MarkdownV2" | "Markdown" | "HTML", // 消息内容解析方式，默认 text
-    description?: string, // command 提示描述，在 command 列表中显示，仅仅在 Private chat
-    keyboard?: BotMessageKeyboard, // 键盘列表，在 Public chat 中显示
+    /** Optional buttons to display in private chats */
+    buttons?: Array<BotMessageButton>,
+    /** Optional command description shown in command list (private chats only) */
+    description?: string,
+    /** Optional message parsing mode */
+    parse_mode?: "HTML" | "MARKDOWN" | "MARKDOWNV2" | "TEXT",
+    /** Main message text content */
+    text: string,
 }
 
+/**
+ * Type definition for a collection of bot messages indexed by command
+ */
 declare interface BotMessages {
     [key: string]: BotMessage
 }
 
+/**
+ * Bot messages response interface with command definitions
+ */
 declare interface BotMessagesResponse {
+    /** Map of command names to their corresponding message configurations */
     commands: { [key: string]: BotMessage };
 }

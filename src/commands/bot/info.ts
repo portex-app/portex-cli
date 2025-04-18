@@ -1,11 +1,11 @@
 import { Args } from '@oclif/core'
 import { ColumnUserConfig, Indexable, table, TableUserConfig } from 'table';
 
-import { apiGetBot } from '../api/modules/telegram/index.js';
-import { BaseCommand } from '../lib/base-command.js';
-import { getTableConfig } from '../utils/index.js';
+import { apiGetBot } from '../../api/modules/telegram/index.js';
+import { BaseCommand } from '../../lib/base-command.js';
+import { getTableConfig } from '../../utils/index.js';
 
-export default class Bot extends BaseCommand {
+export default class BotInfo extends BaseCommand {
     static override args = {
         appName: Args.string({ description: 'application name', required: true }),
     }
@@ -13,7 +13,7 @@ export default class Bot extends BaseCommand {
     static topic = 'bot';
 
     public async run(): Promise<void> {
-        const { args } = await this.parse(Bot);
+        const { args } = await this.parse(BotInfo);
         const { id: application_id, platform_name } = await this.getApplicationInfo({ application_name: args.appName });
         if (platform_name === 'Telegram') {
             try {
@@ -27,7 +27,7 @@ export default class Bot extends BaseCommand {
         }
     }
 
-    private async showBotInfo(info: BotInfo): Promise<void> {
+    private async showBotInfo(info: TelegramBotInfo): Promise<void> {
         const TABLE_COLUMNS: Indexable<ColumnUserConfig> = {
             0: { alignment: 'center', verticalAlignment: 'middle', width: 20 },
             1: { alignment: 'center', verticalAlignment: 'middle', width: 80 },

@@ -55,7 +55,7 @@ class RequestHttp {
                     this.spinner.fail(`The token has expired. Please execute the command 'portex login' to obtain a new token.`);
                 }
                 else if (error.response) {
-                    errorMessage = `Error: ${error.response.data}`;
+                    errorMessage = `Error: ${JSON.stringify(error.response.data)}`;
                 } else if (error.request) {
                     // 请求已发出，但没有收到响应
                     errorMessage = 'No response received';

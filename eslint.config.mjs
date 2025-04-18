@@ -16,6 +16,7 @@ export default [
   {
     rules: {
       camelcase: 'off',
+      'unicorn/prefer-ternary': 'off',
     },
   },
 ]

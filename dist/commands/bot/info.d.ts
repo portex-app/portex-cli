@@ -1,5 +1,5 @@
-import { BaseCommand } from '../lib/base-command.js';
-export default class Bot extends BaseCommand {
+import { BaseCommand } from '../../lib/base-command.js';
+export default class BotInfo extends BaseCommand {
     static args: {
         appName: import("@oclif/core/interfaces").Arg<string, Record<string, unknown>>;
     };

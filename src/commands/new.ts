@@ -37,7 +37,7 @@ export default class New extends BaseCommand {
                 platform_id,
             });
             // Show success message if creation is successful
-            this.spinner.succeed("Create application success! 🎉 🎉 🎉");
+            this.spinner.succeed("Create application success! :tada: :tada: :tada:");
         } catch {
             // Show failure message if the creation fails
             this.spinner.fail("Create application failed, please try again");
@@ -65,9 +65,10 @@ export default class New extends BaseCommand {
                 type: 'input',
                 async validate(input) {
                     // Validation for the application name
-                    const regex = /^[a-zA-Z][a-zA-Z0-9-_]{0,35}$/;  // Name must start with a letter and can include letters, numbers, or underscores
+                    // Validation for the application name 小写 数字 下划线 最长35个字符 组成
+                    const regex = /^[a-z0-9_]{5,35}$/; // Name must start with a letter and can include letters, numbers, or underscores
                     if (!regex.test(input)) {
-                        return 'Invalid name: must start with a letter, contain only letters, numbers, or underscores';
+                        return 'Invalid name: must start with a letter, contain only letters, numbers, or underscores, and be 5-35 characters long';
                     }
 
                     return true;

@@ -78,7 +78,8 @@ export default class Ls extends BaseCommand {
         }
         catch {
             // Handle any error that occurs while fetching the list
-            throw new Error("Get application list error");
+            // throw new Error("Get application list error");
+            this.error("Get application list error");
         }
     }
     /**

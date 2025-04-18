@@ -61,8 +61,7 @@ export default class Publish extends BaseCommand {
             }
             return versionInfo;
         }
-        catch (error) {
-            console.error("Error fetching application version:", error);
+        catch {
             throw new Error("Failed to fetch application info.");
         }
     }
