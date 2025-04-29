@@ -78,8 +78,7 @@ export default class Ls extends BaseCommand {
         }
         catch {
             // Handle any error that occurs while fetching the list
-            // throw new Error("Get application list error");
-            this.error("Get application list error");
+            this.error(new Error("Get application list error"));
         }
     }
     /**
@@ -89,7 +88,7 @@ export default class Ls extends BaseCommand {
      */
     async showApplicationList(applications) {
         if (applications.length > 0) {
-            // 定义表格列配置
+            // Define table column configuration
             const columns = {
                 0: { alignment: 'center', verticalAlignment: 'middle', width: 30 },
                 1: { alignment: 'center', verticalAlignment: 'middle', width: 20 },
@@ -101,16 +100,16 @@ export default class Ls extends BaseCommand {
                 7: { alignment: 'center', verticalAlignment: 'middle', width: 8 },
             };
             const config = getTableConfig(columns, [
-                { alignment: 'center', col: 0, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "appid" 合并两行
-                { alignment: 'center', col: 1, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "app_name" 合并两行
-                { alignment: 'center', col: 2, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "platform_name" 合并两行
-                { alignment: 'center', col: 3, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "description" 合并两行
-                { alignment: 'center', col: 4, colSpan: 4, row: 0, verticalAlignment: 'middle' }, // "version" 合并4列（横向）
+                { alignment: 'center', col: 0, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "appid" merge two rows
+                { alignment: 'center', col: 1, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "app_name" merge two rows
+                { alignment: 'center', col: 2, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "platform_name" merge two rows
+                { alignment: 'center', col: 3, row: 0, rowSpan: 2, verticalAlignment: 'middle' }, // "description" merge two rows
+                { alignment: 'center', col: 4, colSpan: 4, row: 0, verticalAlignment: 'middle' }, // "version" merge 4 columns (horizontal)
             ]);
-            // 定义表头
+            // Define table headers
             const rows = [
-                ['appliaction_id', 'app_name', 'platform_name', 'description', 'version', '', '', ''], // 一级表头
-                ['', '', '', '', 'last', 'dev', 'test', 'prod'], // 二级表头
+                ['appliaction_id', 'app_name', 'platform_name', 'description', 'version', '', '', ''], // First level header
+                ['', '', '', '', 'last', 'dev', 'test', 'prod'], // Second level header
             ];
             for (const application of applications) {
                 const defaultItem = [

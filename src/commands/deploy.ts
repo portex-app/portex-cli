@@ -3,7 +3,6 @@ import AdmZip from "adm-zip";
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-import ProgressBar from 'progress';
 import { v4 as uuidv4 } from 'uuid';
 
 import { apiGetApplicationDetail, apiGetPreUploadUrl, apiPutCompressFile } from '../api/modules/applications/index.js';
@@ -44,24 +43,28 @@ export default class Deploy extends BaseCommand {
             const response = await apiGetApplicationDetail(application_id);
             last_version = response.last_version + 1;
         } catch {
-            this.spinner.fail('Get application version info failed')
-            this.spinner.stop()
-            this.exit(1);
+            throw new Error("Failed to get application version information");
         }
+
+        let presigned_url = '';
 
         try {
             this.spinner.start('Get presigned URL...');
-            const { url: presigned_url } = await apiGetPreUploadUrl(application_id, file_MD5, description);
+            const { url } = await apiGetPreUploadUrl(application_id, file_MD5, description);
+            presigned_url = url
             this.spinner.succeed('Get presigned URL success');
+        } catch {
+            throw new Error("Failed to get presigned URL");
+        }
+
+        try {
             if (presigned_url) {
                 await this.uploadFile(presigned_url, zip_file_path, file_MD5, description);
                 this.spinner.info(`Appliaction Last Version: ${last_version}`);
                 this.spinner.info(`you can use 'portex publish ${args.appName} ${last_version} [-e dev|test|prod]' command to publish application`)
             }
         } catch {
-            this.spinner.fail('Get presigned URL failed')
-            this.spinner.stop()
-            this.exit(1);
+            throw new Error("Failed to upload file");
         } finally {
             this.spinner.stop()
         }
@@ -161,33 +164,34 @@ export default class Deploy extends BaseCommand {
      */
     private async uploadFile(presignedUrl: string, zipFilePath: string, fileMD5: string, description: string): Promise<void> {
         const zipFileBuffer = fs.readFileSync(zipFilePath);
+        const fileSize = zipFileBuffer.length;
+
+        if (fileSize === 0) {
+            throw new Error('File is empty');
+        }
+
         try {
+            this.spinner.start('Start Upload file');
 
-
-            this.spinner.start(`Deploy file ${zipFilePath}...`);
-            const bar = new ProgressBar(':bar :current/:total :percent', {
-                complete: '=',
-                incomplete: ' ',
-                total: 100,
-                width: 40,
-            });
             await apiPutCompressFile({
                 description,
                 file: zipFileBuffer,
                 md5: fileMD5,
-                onUploadProgress(progressEvent: ProgressEvent) {
-                    if (progressEvent.total) {
-                        const percent = Math.floor((progressEvent.loaded / progressEvent.total) * 100); // 计算百分比
-                        bar.update(percent / 100); // 更新进度条，进度为百分比
+                onUploadProgress: (progressEvent: { loaded?: number; total?: number }) => {
+                    if (progressEvent.total && progressEvent.loaded) {
+                        this.spinner.text = `Uploading file...`;
                     }
                 },
                 url: presignedUrl,
             });
-            this.spinner.succeed(`Deploy success`);
-        } catch {
-            this.spinner.stop()
-            throw new Error(`Deploy failed`)
+            this.spinner.succeed('File uploaded successfully');
+        } catch (error) {
+            this.spinner.fail('Upload failed');
+            throw new Error(`Deploy failed: ${error instanceof Error ? error.message : 'Unknown error'}`);
+        } finally {
+            this.spinner.stop();
         }
     }
 }
+
 

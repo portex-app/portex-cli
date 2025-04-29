@@ -37,11 +37,9 @@ export default class New extends BaseCommand {
                 platform_id,
             });
             // Show success message if creation is successful
-            this.spinner.succeed("Create application success! :tada: :tada: :tada:");
+            this.spinner.succeed("Create application success! 🎉 🎉 🎉");
         } catch {
-            // Show failure message if the creation fails
-            this.spinner.fail("Create application failed, please try again");
-            // throw new Error('Create application failed, please try again');
+            throw new Error("Failed to create application. Please check your input and try again.");
         }
     }
 
@@ -134,4 +132,5 @@ export default class New extends BaseCommand {
         // If no platform is provided, prompt the user to choose a platform
         return this.choisePlatform();
     }
+
 }

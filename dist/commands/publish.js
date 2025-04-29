@@ -39,10 +39,10 @@ export default class Publish extends BaseCommand {
             if (environmentConfirm) {
                 const request_data = {
                     application_id,
-                    "PublishApplicationVersionRequest": {
+                    PublishApplicationVersionRequest: {
                         "env": environment,
                     },
-                    "version_number": version,
+                    version_number: version,
                 };
                 this.publishApplication(request_data);
             }

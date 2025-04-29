@@ -18,11 +18,11 @@ export default class BotInfo extends BaseCommand {
                 this.showBotInfo(res);
             }
             catch {
-                this.spinner.fail(`Telegram Appliaction is not bound to a Telegram bot. Please use 'portex bot register ${args.appName} <bot_token>' bind a Telegram bot before set menu."`);
+                throw new Error("Telegram Application is not bound to a Telegram bot. Please use 'portex bot register <application_name> <bot_token>' to bind a Telegram bot before setting menu.");
             }
         }
         else {
-            this.spinner.fail('Only Telegram Platform Appliaction supports');
+            throw new Error('Only Telegram Platform Application is supported');
         }
     }
     async showBotInfo(info) {

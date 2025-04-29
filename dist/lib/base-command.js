@@ -1,4 +1,5 @@
 import { Command } from '@oclif/core';
+import { AxiosError } from 'axios';
 import inquirer from 'inquirer';
 import ora from 'ora';
 import { apiGetApplicationList } from '../api/modules/applications/index.js';
@@ -10,8 +11,35 @@ export class BaseCommand extends Command {
         super(argv, config);
         this.spinner = ora();
     }
+    /**
+     * Enhanced error handling method
+     * Provides user-friendly error messages based on error type
+     */
     async catch(error) {
-        this.error(`${error.message}`, { exit: 1 });
+        // Stop spinner if it's running
+        this.spinner.stop();
+        // Handle different types of errors
+        if (error instanceof AxiosError) {
+            // Handle Axios errors (network, API errors)
+            const { request, response } = error;
+            if (response) {
+                // The request was made and the server responded with a status code
+                // that falls out of the range of 2xx
+                const { data } = response;
+                const message = data?.message || 'Unknown server error';
+                this.error(message, { exit: 1 });
+            }
+            else if (request) {
+                // The request was made but no response was received
+                this.error('Network connection error, please check your network connection', { exit: 1 });
+            }
+            else {
+                // Something happened in setting up the request that triggered an Error
+                this.error(error.message || 'An unknown error occurred', { exit: 1 });
+            }
+        }
+        // Handle custom thrown errors and other types of errors
+        this.error(error.message || 'An unknown error occurred', { exit: 1 });
     }
     /**
      * @description 选择平台

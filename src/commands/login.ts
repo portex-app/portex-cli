@@ -59,8 +59,20 @@ export default class Login extends BaseCommand {
             fs.writeFileSync(process.env._PORTEX_CONFIG_TOKEN_FILE_PATH_ as string, token);
             // Notify the user of successful login
             this.spinner.succeed('Initialization completed. Congratulations! 🎉 🎉 🎉');
-        } catch {
-            throw new Error('Initialization failed, please try again');
+        } catch (error) {
+            this.spinner.fail('登录失败');
+
+            if (error instanceof Error) {
+                this.log(`错误信息: ${error.message}`);
+            }
+
+            this.log('\n可能的原因：');
+            this.log('1. 账号或密码错误');
+            this.log('2. 网络连接问题');
+            this.log('3. 服务器暂时不可用');
+            this.log('\n请检查您的网络连接并重试。如果问题持续存在，请联系技术支持。');
+
+            throw new Error('登录失败，请检查您的网络连接并重试');
         }
     }
 }

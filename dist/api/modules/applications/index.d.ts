@@ -1,30 +1,43 @@
 /**
- * @description 创建应用
- * @param params 创建应用参数
- * @returns {Promise<void>} void
+ * Applications API Module
+ *
+ * This module provides functionality for managing applications, including:
+ * - Creating new applications
+ * - Querying application lists and details
+ * - Handling application file uploads
+ */
+/**
+ * Create a new application
+ * @param params - Application creation parameters including name, description, and platform
+ * @returns Promise<void>
  */
 export declare const apiCreateApplication: (params: CreateApplicationRequest) => Promise<void>;
 /**
- * @description 获取应用列表
- * @returns 应用列表
+ * Get application list with optional filtering
+ * @param params - Optional query parameters for filtering applications
+ * @returns Promise<ApplicationQueryResponse> - List of applications matching the query
  */
 export declare const apiGetApplicationList: (params?: ApplicationQueryRequest) => Promise<ApplicationQueryResponse>;
 /**
- * @description 获取应用详情
- * @param {string} applicationId - 应用ID
- * @returns  应用信息
+ * Get detailed information about a specific application
+ * @param applicationId - The ID of the application
+ * @returns Promise<Application> - Detailed application information
  */
 export declare const apiGetApplicationDetail: (applicationId: string) => Promise<Application>;
 /**
- * @description 获取应用上传地址
- * @param {string} applicationId - 应用ID
- * @param {string} md5 文件md5
- * @returns 返回上传地址
+ * Get pre-upload URL for application file
+ * @param applicationId - The ID of the application
+ * @param md5 - MD5 hash of the file to be uploaded
+ * @param description - Description of the file
+ * @returns Promise<{ url: string }> - Pre-signed upload URL
  */
 export declare const apiGetPreUploadUrl: (applicationId: string, md5: string, description: string) => Promise<{
     url: string;
 }>;
 /**
- * @description 上传压缩包
+ * Upload compressed file to the specified URL
+ * Handles file upload with progress tracking and metadata
+ * @param params - Upload parameters including file, MD5, description and progress callback
+ * @returns Promise of upload response
  */
 export declare const apiPutCompressFile: (params: DeployUploadParams) => Promise<unknown>;

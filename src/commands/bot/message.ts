@@ -111,8 +111,8 @@ export default class BotMessage extends BaseCommand {
             this.log('More info see: https://portex-app.gitbook.io/portex-docs/cli/bot-manager');
             fs.writeFileSync(save_file_path, JSON.stringify(commands, null, 2));
             this.spinner.succeed('Get bot messages successfully');
-        } catch (error) {
-            this.spinner.fail('Get bot messages failed: ' + error);
+        } catch {
+            throw new Error("Failed to get bot messages. Please check your input and try again.");
         }
     }
 
@@ -200,9 +200,9 @@ export default class BotMessage extends BaseCommand {
     private async saveBotMessages(application_id: string, messages: BotMessages): Promise<void> {
         try {
             await apiSaveBotMessages(application_id, messages);
-            this.spinner.succeed('Save bot messages successfully');
-        } catch (error) {
-            this.spinner.fail('Save bot messages failed: ' + error);
+            this.spinner.succeed('Save bot messages successfully')
+        } catch {
+            throw new Error("Failed to save bot messages. Please check your input and try again.")
         }
     }
 }

@@ -1,4 +1,11 @@
 /**
+ * Type definitions for Application Publishing API
+ * 
+ * This file contains interfaces and type definitions used for publishing and unpublishing
+ * application versions to different environments.
+ */
+
+/**
  * Publish application version request interface
  * Contains deployment environment information
  */

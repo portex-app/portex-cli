@@ -3,89 +3,114 @@ import fs from 'node:fs';
 import path from "node:path";
 import ora from 'ora';
 import { writeLogFile } from "../utils/index.js";
+// 定义请求配置
 const config = {
-    // 默认地址请求地址
     baseURL: 'https://console.portex.cloud',
+    loading: true, // 默认显示 loading
+    timeout: 10_000,
 };
 class RequestHttp {
     service;
     spinner;
     constructor(config) {
-        this.spinner = ora(); // 初始化spinner
-        // instantiation
+        this.spinner = ora();
         this.service = axios.create(config);
-        /**
-         * @description 请求拦截器
-         * 客户端发送请求 -> [请求拦截器] -> 服务器
-         */
+        // 请求拦截器
         this.service.interceptors.request.use((config) => {
-            const token = fs.readFileSync(path.join(process.env._PORTEX_CONFIG_TOKEN_FILE_PATH_), 'utf8');
-            if (config.method?.toLocaleLowerCase() === "put" && config.headers.has('x-amz-meta-authorization')) {
-                config.headers['x-amz-meta-authorization'] = `Bearer ${token}`;
+            try {
+                const token = fs.readFileSync(path.join(process.env._PORTEX_CONFIG_TOKEN_FILE_PATH_), 'utf8');
+                if (config.method?.toLocaleLowerCase() === "put" && config.headers.has('x-amz-meta-authorization')) {
+                    config.headers['x-amz-meta-authorization'] = `Bearer ${token}`;
+                }
+                else {
+                    config.headers.Authorization = `Bearer ${token}`;
+                }
             }
-            else {
-                config.headers.Authorization = `Bearer ${token}`;
+            catch (error) {
+                this.spinner.fail('Failed to read token file');
+                return Promise.reject(error);
             }
-            // 开始请求时启动spinner
-            this.spinner.start('Processing your request...');
+            // 只在配置中不明确禁用 loading 时显示
+            if (config.loading !== false) {
+                this.spinner.start('Processing your request...');
+            }
             return config;
-        }, error => Promise.reject(error));
-        /**
-         * @description 响应拦截器
-         *  服务器换返回信息 -> [拦截统一处理] -> 客户端JS获取到信息
-         */
+        }, (error) => {
+            this.handleError(error);
+            return Promise.reject(error);
+        });
+        // 响应拦截器
         this.service.interceptors.response.use((response) => {
-            this.spinner.stop();
-            return response.data;
-        }, error => {
-            this.spinner.stop();
-            let errorMessage = 'Failed';
-            if (error.response.status === 401) {
-                this.spinner.fail(`The token has expired. Please execute the command 'portex login' to obtain a new token.`);
+            if (response.config.loading !== false) {
+                this.spinner.stop();
             }
-            else if (error.response) {
-                errorMessage = `Error: ${JSON.stringify(error.response.data)}`;
+            return response;
+        }, (error) => {
+            if (error.config?.loading !== false) {
+                this.spinner.stop();
             }
-            else if (error.request) {
-                // 请求已发出，但没有收到响应
-                errorMessage = 'No response received';
-            }
-            else {
-                // 发生了一些设置请求时的错误
-                errorMessage = error.message;
-            }
-            this.spinner.fail(errorMessage);
-            writeLogFile(JSON.stringify(error));
-            return Promise.reject(errorMessage);
+            this.handleError(error);
+            return Promise.reject(error);
         });
     }
-    /*
-    * @description 新增的delete请求方法封装
-    * @returns Promise
-    */
-    delete(url, params, _object = {}) {
-        return this.service.delete(url, { params, ..._object });
+    async delete(url, params, config = {}) {
+        const response = await this.service.delete(url, { params, ...config });
+        return response.data;
     }
-    /*
-     * @description 常用请求方法封装
-     * @returns Promise
-     */
-    get(url, params, _object = {}) {
-        return this.service.get(url, { params, ..._object });
+    async get(url, params, config = {}) {
+        const response = await this.service.get(url, { params, ...config });
+        return response.data;
     }
-    /*
-     * @description 常用请求方法封装
-     * @returns Promise
-     */
-    post(url, params, _object = {}) {
-        return this.service.post(url, params, _object);
+    async post(url, data, config = {}) {
+        const response = await this.service.post(url, data, config);
+        return response.data;
     }
-    /*
-     * @description 常用请求方法封装
-     * @returns Promise
-     */
-    put(url, params, _object = {}) {
-        return this.service.put(url, params, _object);
+    async put(url, data, config = {}) {
+        const response = await this.service.put(url, data, config);
+        return response.data;
+    }
+    handleError(error) {
+        let errorMessage = 'Request failed';
+        if (error.response) {
+            // 服务器响应错误
+            switch (error.response.status) {
+                case 401: {
+                    errorMessage = 'Token expired. Please execute "portex login" to obtain a new token.';
+                    break;
+                }
+                case 403: {
+                    errorMessage = 'Access denied';
+                    break;
+                }
+                case 404: {
+                    errorMessage = 'Resource not found';
+                    break;
+                }
+                case 500: {
+                    errorMessage = 'Server error';
+                    break;
+                }
+                default: {
+                    errorMessage = `Request failed with status ${error.response.status}`;
+                }
+            }
+        }
+        else if (error.request) {
+            // 请求已发出但没有收到响应
+            if (error.code === 'ECONNABORTED') {
+                errorMessage = 'Request timeout';
+            }
+            else {
+                errorMessage = 'Network error: No response received';
+            }
+        }
+        else {
+            // 请求配置错误
+            errorMessage = `Request error: ${error.message}`;
+        }
+        this.spinner.fail(errorMessage);
+        // 记录错误日志
+        writeLogFile(JSON.stringify(error, null, 2));
     }
 }
 export default new RequestHttp(config);
