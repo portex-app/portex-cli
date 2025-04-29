@@ -57,6 +57,7 @@ export const apiPutCompressFile = (params) => {
     return Http.put(url, file, {
         headers: request_header,
         loading: false,
-        onUploadProgress: onUploadProgress ? (progressEvent) => onUploadProgress(progressEvent) : undefined
+        onUploadProgress: onUploadProgress ? (progressEvent) => onUploadProgress(progressEvent) : undefined,
+        timeout: 600_000 // 10 minutes timeout
     });
 };

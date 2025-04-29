@@ -1,7 +1,7 @@
 {
     "name": "@portex-app/cli",
     "description": "portex cli for one-click web game deployment",
-    "version": "0.1.3",
+    "version": "0.1.4",
     "author": "kassell",
     "bin": {
         "portex": "bin/run.js"
