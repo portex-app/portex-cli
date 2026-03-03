@@ -8,40 +8,24 @@
     },
     "bugs": "https://github.com/portex-app/portex-cli/issues",
     "dependencies": {
-        "@oclif/core": "^4",
-        "@oclif/plugin-help": "^6.2.22",
-        "@oclif/plugin-not-found": "^3.2.42",
-        "@oclif/plugin-plugins": "^5",
-        "@oclif/plugin-warn-if-update-available": "^3.1.33",
         "@types/adm-zip": "^0.5.7",
-        "@types/inquirer": "^9.0.7",
         "@types/progress": "^2.0.7",
-        "@typescript-eslint/eslint-plugin": "^8.24.1",
-        "@typescript-eslint/parser": "^8.24.1",
+        "@types/react": "^18",
         "adm-zip": "^0.5.16",
         "axios": "^1.7.9",
-        "cli-table3": "^0.6.5",
-        "inquirer": "^12.4.2",
-        "ora": "^8.2.0",
-        "progress": "^2.0.3",
-        "table": "^6.9.0",
-        "terminal-table": "^0.0.12",
-        "typescript-eslint": "^8.24.1",
+        "commander": "^12.1.0",
+        "ink": "^5.0.1",
+        "ink-select-input": "^6.0.0",
+        "ink-spinner": "^5.0.0",
+        "ink-text-input": "^6.0.0",
+        "react": "^18",
+        "update-notifier": "^7.3.1",
         "uuid": "^11.0.5"
     },
     "devDependencies": {
-        "@eslint/compat": "^1",
-        "@oclif/prettier-config": "^0.2.1",
-        "@oclif/test": "^4",
-        "@types/chai": "^4",
         "@types/node": "^18",
-        "chai": "^4",
-        "eslint": "^9",
-        "eslint-config-oclif": "^6",
-        "eslint-config-prettier": "^10",
-        "oclif": "^4",
+        "@types/update-notifier": "^6.0.8",
         "shx": "^0.3.3",
-        "ts-node": "^10",
         "typescript": "^5"
     },
     "engines": {
@@ -49,46 +33,25 @@
     },
     "files": [
         "./bin",
-        "./dist",
-        "./oclif.manifest.json"
+        "./dist"
     ],
     "homepage": "https://github.com/portex-app/portex-cli",
     "keywords": [
-        "oclif"
+        "portex",
+        "cli",
+        "tui",
+        "deploy"
     ],
     "license": "MIT",
     "main": "dist/index.js",
     "type": "module",
-    "oclif": {
-        "bin": "portex",
-        "dirname": "portex",
-        "commands": "./dist/commands",
-        "plugins": [
-            "@oclif/plugin-help",
-            "@oclif/plugin-warn-if-update-available",
-            "@oclif/plugin-not-found",
-            "@oclif/plugin-update"
-        ],
-        "topicSeparator": " ",
-        "topics": {},
-        "hooks": {
-            "init": [
-                "./dist/hooks/init/set-environment"
-            ]
-        },
-        "description": "portex cli for one-click web game deployment"
-    },
     "repository": {
         "type": "git",
         "url": "git+https://github.com/portex-app/portex-cli.git"
     },
     "scripts": {
         "build": "shx rm -rf dist && tsc -b",
-        "lint:eslint": "eslint --fix \"src/**/*.{js,cjs,ts,tsx}\"",
-        "postpack": "shx rm -f oclif.manifest.json",
-        "posttest": "yarn lint",
-        "prepack": "oclif manifest && oclif readme",
-        "version": "oclif readme && git add README.md"
+        "dev": "tsc -b --watch"
     },
     "types": "dist/index.d.ts"
 }

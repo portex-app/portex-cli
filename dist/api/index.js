@@ -1,21 +1,16 @@
 import axios from "axios";
 import fs from 'node:fs';
 import path from "node:path";
-import ora from 'ora';
 import { writeLogFile } from "../utils/index.js";
-// 定义请求配置
 const config = {
     baseURL: 'https://console.portex.cloud',
-    loading: true, // 默认显示 loading
     timeout: 10_000,
 };
 class RequestHttp {
     service;
-    spinner;
     constructor(config) {
-        this.spinner = ora();
         this.service = axios.create(config);
-        // 请求拦截器
+        // 请求拦截器：注入 Authorization token
         this.service.interceptors.request.use((config) => {
             try {
                 const token = fs.readFileSync(path.join(process.env._PORTEX_CONFIG_TOKEN_FILE_PATH_), 'utf8');
@@ -27,31 +22,12 @@ class RequestHttp {
                 }
             }
             catch (error) {
-                this.spinner.fail('Failed to read token file');
                 return Promise.reject(error);
             }
-            // 只在配置中不明确禁用 loading 时显示
-            if (config.loading !== false) {
-                this.spinner.start('Processing your request...');
-            }
             return config;
-        }, (error) => {
-            this.handleError(error);
-            return Promise.reject(error);
-        });
-        // 响应拦截器
-        this.service.interceptors.response.use((response) => {
-            if (response.config.loading !== false) {
-                this.spinner.stop();
-            }
-            return response;
-        }, (error) => {
-            if (error.config?.loading !== false) {
-                this.spinner.stop();
-            }
-            this.handleError(error);
-            return Promise.reject(error);
-        });
+        }, (error) => Promise.reject(this.normalizeError(error)));
+        // 响应拦截器：统一错误处理
+        this.service.interceptors.response.use((response) => response, (error) => Promise.reject(this.normalizeError(error)));
     }
     async delete(url, params, config = {}) {
         const response = await this.service.delete(url, { params, ...config });
@@ -69,48 +45,31 @@ class RequestHttp {
         const response = await this.service.put(url, data, config);
         return response.data;
     }
-    handleError(error) {
-        let errorMessage = 'Request failed';
+    // 将 AxiosError 转换为带有可读 message 的标准 Error
+    normalizeError(error) {
+        let message = 'Request failed';
         if (error.response) {
-            // 服务器响应错误
             switch (error.response.status) {
-                case 401: {
-                    errorMessage = 'Token expired. Please execute "portex login" to obtain a new token.';
+                case 401:
+                    message = 'TOKEN_EXPIRED';
                     break;
-                }
-                case 403: {
-                    errorMessage = 'Access denied';
+                case 403:
+                    message = 'ACCESS_DENIED';
                     break;
-                }
-                case 404: {
-                    errorMessage = 'Resource not found';
+                case 404:
+                    message = 'NOT_FOUND';
                     break;
-                }
-                case 500: {
-                    errorMessage = 'Server error';
+                case 500:
+                    message = 'SERVER_ERROR';
                     break;
-                }
-                default: {
-                    errorMessage = `Request failed with status ${error.response.status}`;
-                }
+                default: message = `HTTP_${error.response.status}`;
             }
         }
         else if (error.request) {
-            // 请求已发出但没有收到响应
-            if (error.code === 'ECONNABORTED') {
-                errorMessage = 'Request timeout';
-            }
-            else {
-                errorMessage = 'Network error: No response received';
-            }
+            message = error.code === 'ECONNABORTED' ? 'TIMEOUT' : 'NETWORK_ERROR';
         }
-        else {
-            // 请求配置错误
-            errorMessage = `Request error: ${error.message}`;
-        }
-        this.spinner.fail(errorMessage);
-        // 记录错误日志
         writeLogFile(JSON.stringify(error, null, 2));
+        return new Error(message);
     }
 }
 export default new RequestHttp(config);
